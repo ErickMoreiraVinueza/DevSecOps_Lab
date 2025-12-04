@@ -1,0 +1,39 @@
+name: DevSecOps AI Auditor
+
+# Se ejecuta en cada Push o Pull Request 
+on: [push, pull_request]
+
+jobs:
+  analisis_ia:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Se obtiene el código
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        
+      # Se prepara el entorno Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Install Libraries
+        run: pip install -r requirements.txt
+        
+      # Ejecuta el modelo en codigo nuevo
+      # Busca archivos .c o .cpp y corre el scanner
+      - name: Scan Code for Vulnerabilities
+        run: |
+          echo "Iniciando escaneo de seguridad SEMMA..."
+          # Buscamos archivos C/C++ (excluyendo carpetas ocultas)
+          find . -name "*.c" -o -name "*.cpp" -o -name "*.cc" > files_to_check.txt
+          
+          # Si encuentra archivos, los analiza uno por uno
+          if [ -s files_to_check.txt ]; then
+            while IFS= read -r file; do
+              python scanner.py "$file"
+            done < files_to_check.txt
+          else
+            echo "No se encontraron archivos C/C++ para analizar."
+          fi
