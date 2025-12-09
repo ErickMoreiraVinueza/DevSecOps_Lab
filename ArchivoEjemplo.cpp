@@ -1,24 +1,31 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_BUFFER_SIZE 64
+// ESTE CÓDIGO ES INTENCIONALMENTE INSEGURO
+// Usa 'gets', que es la función más peligrosa en la historia de C.
+// La IA debería darle una probabilidad cercana al 99%.
 
-void procesar_input_seguro(const char *usuario) {
-    char buffer[MAX_BUFFER_SIZE];
-
-    // SEGURIDAD: Usamos snprintf en lugar de strcpy o sprintf.
-    // 'sizeof(buffer)' garantiza que NUNCA escribiremos más allá del límite.
-    // Tu IA detectará "snprintf" y "sizeof" como patrones positivos.
-    int escrito = snprintf(buffer, sizeof(buffer), "Usuario: %s", usuario);
-
-    if (escrito >= 0 && escrito < sizeof(buffer)) {
-        printf("Procesamiento exitoso: %s\n", buffer);
-    } else {
-        printf("Error: El input fue truncado por seguridad.\n");
-    }
+void funcion_prohibida() {
+    char buffer_pequeno[8];
+    
+    printf("Introduce datos: ");
+    
+    // PELIGRO EXTREMO: gets() no verifica límites.
+    // Es imposible usar esta función de forma segura.
+    // El modelo TF-IDF asociará la palabra "gets" con vulnerabilidad inmediatamente.
+    gets(buffer_pequeno); 
+    
+    // Y para asegurar, añadimos un strcpy inseguro también
+    char otro_buffer[8];
+    strcpy(otro_buffer, buffer_pequeno);
 }
 
 int main() {
-    procesar_input_seguro("Admin_Usuario_Validado");
+    funcion_prohibida();
     return 0;
 }
+
+
+
+
+
