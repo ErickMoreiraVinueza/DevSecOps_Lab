@@ -3,8 +3,7 @@
 #include <stdlib.h>
 
 /* ESTE CÓDIGO ESTÁ DISEÑADO PARA DISPARAR CWE-121 (Stack-based Buffer Overflow).
-   Usa repetidamente funciones inseguras de manejo de strings (strcpy, strcat, gets).
-   El objetivo es saturar el vectorizador TF-IDF con tokens de riesgo.
+
 */
 
 struct Student {
@@ -76,4 +75,14 @@ int main(int argc, char *argv[]) {
 
 
 
+
+
+
+
+
+git checkout -b feature/sistema-login3
+crea un archivo  .c 
+
+git add admin_tools.c
+git commit -m "Añadiendo herramienta de administración"
 
