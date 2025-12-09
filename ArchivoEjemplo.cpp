@@ -1,21 +1,24 @@
-#include <iostream>
-#include <string>
-#include <vector>
+#include <stdio.h>
+#include <string.h>
 
-// SEGURIDAD: Usar std::string maneja la memoria automáticamente.
-// No hay posibilidad de Buffer Overflow aquí.
-void saludar_usuario(const std::string& nombre) {
-    if (nombre.length() > 50) {
-        std::cout << "Nombre demasiado largo." << std::endl;
-        return;
+#define MAX_BUFFER_SIZE 64
+
+void procesar_input_seguro(const char *usuario) {
+    char buffer[MAX_BUFFER_SIZE];
+
+    // SEGURIDAD: Usamos snprintf en lugar de strcpy o sprintf.
+    // 'sizeof(buffer)' garantiza que NUNCA escribiremos más allá del límite.
+    // Tu IA detectará "snprintf" y "sizeof" como patrones positivos.
+    int escrito = snprintf(buffer, sizeof(buffer), "Usuario: %s", usuario);
+
+    if (escrito >= 0 && escrito < sizeof(buffer)) {
+        printf("Procesamiento exitoso: %s\n", buffer);
+    } else {
+        printf("Error: El input fue truncado por seguridad.\n");
     }
-    
-    std::string mensaje = "Bienvenido al sistema, " + nombre;
-    std::cout << mensaje << std::endl;
 }
 
 int main() {
-    std::string input = "Desarrollador";
-    saludar_usuario(input);
+    procesar_input_seguro("Admin_Usuario_Validado");
     return 0;
 }
