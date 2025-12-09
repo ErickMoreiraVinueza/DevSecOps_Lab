@@ -1,15 +1,21 @@
 #include <string.h>
 #include <stdio.h>
 
-void bad_function(char *input) {
-    char small_buffer[8];
-    strcpy(small_buffer, input); /* CWE121 */
-    printf("%s\n", small_buffer);
+void CWE121_Stack_Based_Buffer_Overflow__CWE193_char_alloca_loop_01_bad()
+{
+    char * data;
+    char dataBadBuffer[10];
+    data = dataBadBuffer;
+
+    char source[20] = "AAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    strcpy(data, source); /* CWE121 */
+    printf("%s\n", data);
 }
 
-int main(int argc, char *argv[]) {
-    char local_buffer[10];
-    strcpy(local_buffer, argv[1]); /* CWE121 */
-    bad_function(argv[1]);
+int main(int argc, char * argv[])
+{
+    char localBuffer[10];
+    strcpy(localBuffer, argv[1]); /* CWE121 */
+    CWE121_Stack_Based_Buffer_Overflow__CWE193_char_alloca_loop_01_bad();
     return 0;
 }
