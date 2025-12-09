@@ -1,88 +1,39 @@
+// tools.c - Ejemplo de código seguro
+// No contiene funciones inseguras ni patrones de vulnerabilidad comunes
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-/* ESTE CÓDIGO ESTÁ DISEÑADO PARA DISPARAR CWE-121 (Stack-based Buffer Overflow).
+#define MAX_INPUT 100
 
-*/
-
-struct Student {
-    char first_name[10];
-    char last_name[10];
-    char student_id[8];
-    char bio[50];
-};
-
-void process_name(char *raw_input, struct Student *s) {
-    // VULNERABILIDAD 1: strcpy sin validación
-    // El modelo detectará el patrón: char[] + strcpy
-    char temp_buffer[10];
-    strcpy(temp_buffer, raw_input); 
-    strcpy(s->first_name, temp_buffer);
+// Función segura para leer texto del usuario
+void leer_texto_seguro(char *buffer, size_t size) {
+    if (fgets(buffer, size, stdin) != NULL) {
+        // Remover salto de línea
+        buffer[strcspn(buffer, "\n")] = '\0';
+    }
 }
 
-void process_lastname(char *raw_input, struct Student *s) {
-    // VULNERABILIDAD 2: Otra instancia de strcpy inseguro
-    char temp_buffer[10];
-    strcpy(temp_buffer, raw_input);
-    strcpy(s->last_name, temp_buffer);
+int sumar(int a, int b) {
+    return a + b;
 }
 
-void process_id(char *raw_input, struct Student *s) {
-    // VULNERABILIDAD 3: strcat sin limites
-    // Concatenar en un buffer fijo es un patrón clásico de CWE-121
-    char id_buffer[8] = "ID:";
-    strcat(id_buffer, raw_input); 
-    strcpy(s->student_id, id_buffer);
-}
+int main(void) {
+    char nombre[MAX_INPUT];
 
-void process_bio_legacy(struct Student *s) {
-    // VULNERABILIDAD 4: La "bomba" gets()
-    // Esta función por sí sola tiene un peso enorme en datasets como SARD/SecureC
-    char bio_buffer[50];
-    printf("Enter bio: ");
-    gets(bio_buffer); 
-    
-    // VULNERABILIDAD 5: Copia insegura final
-    strcpy(s->bio, bio_buffer);
-}
+    printf("Ingrese su nombre: ");
+    leer_texto_seguro(nombre, sizeof(nombre));
 
-void parse_csv_line(char *line) {
-    struct Student current_student;
-    char debug_buffer[20];
+    printf("Hola, %s!\n", nombre);
 
-    // VULNERABILIDAD 6: Copia local insegura para debug
-    strcpy(debug_buffer, line);
-    
-    // Procesamiento en cadena de vulnerabilidades
-    process_name(line, &current_student);
-    process_lastname(line, &current_student);
-    process_id(line, &current_student);
-    process_bio_legacy(&current_student);
-}
+    int x = 5;
+    int y = 10;
+    printf("La suma es: %d\n", sumar(x, y));
 
-int main(int argc, char *argv[]) {
-    if (argc < 2) return 1;
-
-    // VULNERABILIDAD 7: Copia de argumento de línea de comandos sin verificar longitud
-    char command_line_buffer[100];
-    strcpy(command_line_buffer, argv[1]);
-
-    parse_csv_line(command_line_buffer);
-    
     return 0;
 }
 
 
 
-
-
-
-
-
-git checkout -b feature/sistema-login3
-crea un archivo  .c 
-
-git add admin_tools.c
-git commit -m "Añadiendo herramienta de administración"
 
