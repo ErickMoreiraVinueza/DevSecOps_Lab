@@ -3,7 +3,7 @@ import sys
 import os
 import argparse
 
-UMBRAL_RIESGO = 0.70 
+UMBRAL_RIESGO = 0.20 
 
 def cargar_modelo():
     try:
